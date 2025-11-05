@@ -4,12 +4,13 @@ import os
 from datetime import datetime
 import json
 from ai_providers import AIProviderFactory
+from tamerlane_model import get_tamerlane_model
 
 app = Flask(__name__)
 CORS(app)
 
-# Конфигурация - поддержка множественных AI провайдеров
-DEFAULT_PROVIDER = os.getenv('DEFAULT_AI_PROVIDER', 'anthropic')  # anthropic, gemini, ollama, openai
+# Конфигурация - поддержка множественных AI провайдеров + собственная модель!
+DEFAULT_PROVIDER = os.getenv('DEFAULT_AI_PROVIDER', 'tamerlane')  # tamerlane, anthropic, gemini, ollama, openai
 
 # Система промптов для Тамерлана - Тюркского ИИ
 TAMERLANE_SYSTEM_PROMPT = """Сен Тәмірлан - Ұлы Түрік жасанды интеллекті көмекшісісің!
@@ -76,6 +77,7 @@ conversations = {}
 def get_demo_message(user_message: str, provider_name: str) -> str:
     """Демо-сообщение когда API ключ не настроен"""
     provider_names = {
+        'tamerlane': '🏹 ТАМЕРЛАН - Собственная модель (ЛУЧШАЯ для тюркского мира!)',
         'anthropic': 'Anthropic Claude (САМЫЙ УМНЫЙ!)',
         'gemini': 'Google Gemini (Бесплатный)',
         'ollama': 'Ollama (Локальный)',
@@ -83,6 +85,7 @@ def get_demo_message(user_message: str, provider_name: str) -> str:
     }
 
     provider_instructions = {
+        'tamerlane': 'ТАМЕРЛАН - собственная модель с RAG и тюркской базой знаний. Настройте базовый провайдер (anthropic/gemini/ollama)',
         'anthropic': 'Установите ANTHROPIC_API_KEY для использования Claude',
         'gemini': 'Установите GEMINI_API_KEY для использования Gemini',
         'ollama': 'Установите Ollama локально: https://ollama.ai',
@@ -102,6 +105,7 @@ Men Temur - Turk dunyosining sun'iy intellekt yordamchisi!
 {provider_instructions.get(provider_name, 'Настройте API ключ')}
 
 Қолжетімді провайдерлер / Доступные провайдеры:
+🏹 ТАМЕРЛАН - СОБСТВЕННАЯ МОДЕЛЬ! (RAG + База знаний)
 🏆 Anthropic Claude 3.5 Sonnet - САМЫЙ УМНЫЙ!
 ⚡ Google Gemini - Бесплатный и мощный
 💻 Ollama - Локальные модели (100% бесплатно)
@@ -146,18 +150,49 @@ def chat():
 
         # Создание провайдера и генерация ответа
         try:
-            provider = AIProviderFactory.create_provider(provider_name, model)
+            # СПЕЦИАЛЬНЫЙ СЛУЧАЙ: СОБСТВЕННАЯ МОДЕЛЬ ТАМЕРЛАН!
+            if provider_name == 'tamerlane':
+                # Используем собственную модель с RAG
+                tamerlane = get_tamerlane_model(base_provider='anthropic')  # Можно менять base
 
-            if not provider.is_configured():
-                # Демо-режим если провайдер не настроен
-                assistant_message = get_demo_message(user_message, provider_name)
+                # Определяем базовый провайдер для Тамерлана
+                base_provider_name = data.get('base_provider', 'anthropic')
+                base_provider = AIProviderFactory.create_provider(base_provider_name, model)
+
+                if not base_provider.is_configured():
+                    assistant_message = get_demo_message(user_message, 'tamerlane')
+                else:
+                    # Генерация через модель Тамерлан с RAG!
+                    result = tamerlane.generate(
+                        messages=conversations[session_id],
+                        base_model_fn=lambda messages, temperature, max_tokens: base_provider.generate_response(
+                            messages=messages,
+                            temperature=temperature,
+                            max_tokens=max_tokens
+                        ),
+                        temperature=0.7,
+                        max_tokens=4000
+                    )
+                    assistant_message = result['response']
+
+                    # Добавляем метаданные если модель обогатила ответ
+                    if result.get('enhanced'):
+                        assistant_message += f"\n\n_[✨ Обогащено базой знаний Тамерлан]_"
+
             else:
-                # Генерация ответа через выбранный провайдер
-                assistant_message = provider.generate_response(
-                    messages=conversations[session_id],
-                    temperature=0.7,
-                    max_tokens=4000 if provider_name == 'anthropic' else 2000
-                )
+                # Обычные провайдеры
+                provider = AIProviderFactory.create_provider(provider_name, model)
+
+                if not provider.is_configured():
+                    # Демо-режим если провайдер не настроен
+                    assistant_message = get_demo_message(user_message, provider_name)
+                else:
+                    # Генерация ответа через выбранный провайдер
+                    assistant_message = provider.generate_response(
+                        messages=conversations[session_id],
+                        temperature=0.7,
+                        max_tokens=4000 if provider_name == 'anthropic' else 2000
+                    )
 
         except Exception as e:
             return jsonify({
@@ -250,6 +285,21 @@ def get_provider_models(provider_name):
             'provider': provider_name,
             'models': providers[provider_name]['models'],
             'configured': providers[provider_name]['configured']
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/model/tamerlane/info', methods=['GET'])
+def get_tamerlane_info():
+    """Получение информации о собственной модели Тамерлан"""
+    try:
+        tamerlane = get_tamerlane_model()
+        info = tamerlane.get_model_info()
+
+        return jsonify({
+            'success': True,
+            'model_info': info
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500

@@ -21,7 +21,7 @@ class TamerlaneAI {
         this.sendBtnText = document.getElementById('sendBtnText');
         this.loadingSpinner = document.getElementById('loadingSpinner');
         this.statusIndicator = document.getElementById('statusIndicator');
-        this.currentProvider = 'anthropic';
+        this.currentProvider = 'tamerlane';  // 🏹 СОБСТВЕННАЯ МОДЕЛЬ ПО УМОЛЧАНИЮ!
         this.providers = {};
 
         this.attachEventListeners();
