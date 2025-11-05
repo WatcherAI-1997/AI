@@ -14,11 +14,15 @@
                 <p class="subtitle">Түрік Жасанды Интеллект | Turkic AI Assistant</p>
             </div>
             <div class="controls">
-                <button id="clearBtn" class="btn btn-secondary">🗑️ Очистить чат</button>
-                <select id="modelSelect" class="model-select">
-                    <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                    <option value="gpt-4">GPT-4</option>
-                    <option value="gpt-4-turbo-preview">GPT-4 Turbo</option>
+                <button id="clearBtn" class="btn btn-secondary">🗑️ Тазалау / Очистить</button>
+                <select id="providerSelect" class="provider-select">
+                    <option value="anthropic">🏆 Claude (Самый умный!)</option>
+                    <option value="gemini">⚡ Gemini (Бесплатный)</option>
+                    <option value="ollama">💻 Ollama (Локальный)</option>
+                    <option value="openai">🔷 GPT (Опционально)</option>
+                </select>
+                <select id="modelSelect" class="model-select" style="display:none;">
+                    <!-- Заполняется динамически -->
                 </select>
             </div>
         </header>
@@ -32,6 +36,14 @@
                     Men Temur - Turk dunyosining sun'iy intellekt yordamchisi!<br>
                     Я Тамерлан - ИИ-ассистент тюркского мира!
                 </p>
+
+                <h3 style="color: #1e3a5f; margin-top: 20px;">🤖 ЖАҢА! Бірнеше AI моделі / Несколько AI моделей:</h3>
+                <div style="background: #f9f6f0; padding: 15px; border-radius: 10px; margin: 15px 0;">
+                    <p style="margin: 5px 0;"><strong>🏆 Claude 3.5 Sonnet</strong> - САМЫЙ УМНЫЙ! Лучший для сложных задач</p>
+                    <p style="margin: 5px 0;"><strong>⚡ Google Gemini</strong> - Бесплатный и мощный</p>
+                    <p style="margin: 5px 0;"><strong>💻 Ollama</strong> - Локальные модели (100% бесплатно)</p>
+                    <p style="margin: 5px 0;"><strong>🔷 OpenAI GPT</strong> - Опционально</p>
+                </div>
 
                 <h3 style="color: #1e3a5f; margin-top: 20px;">💬 Барлық түркі тілдерінде сөйлеймін / Tüm Türk dillerinde konuşurum:</h3>
                 <div style="background: #f9f6f0; padding: 15px; border-radius: 10px; margin: 15px 0;">

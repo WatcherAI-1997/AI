@@ -1,15 +1,15 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
-import openai
 import os
 from datetime import datetime
 import json
+from ai_providers import AIProviderFactory
 
 app = Flask(__name__)
 CORS(app)
 
-# Конфигурация
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', '')
+# Конфигурация - поддержка множественных AI провайдеров
+DEFAULT_PROVIDER = os.getenv('DEFAULT_AI_PROVIDER', 'anthropic')  # anthropic, gemini, ollama, openai
 
 # Система промптов для Тамерлана - Тюркского ИИ
 TAMERLANE_SYSTEM_PROMPT = """Сен Тәмірлан - Ұлы Түрік жасанды интеллекті көмекшісісің!
@@ -72,6 +72,50 @@ You are Tamerlane (Timur) - THE TURKIC AI ASSISTANT with deep mastery of ALL Tur
 # Хранилище истории разговоров (в продакшене использовать БД)
 conversations = {}
 
+
+def get_demo_message(user_message: str, provider_name: str) -> str:
+    """Демо-сообщение когда API ключ не настроен"""
+    provider_names = {
+        'anthropic': 'Anthropic Claude (САМЫЙ УМНЫЙ!)',
+        'gemini': 'Google Gemini (Бесплатный)',
+        'ollama': 'Ollama (Локальный)',
+        'openai': 'OpenAI GPT'
+    }
+
+    provider_instructions = {
+        'anthropic': 'Установите ANTHROPIC_API_KEY для использования Claude',
+        'gemini': 'Установите GEMINI_API_KEY для использования Gemini',
+        'ollama': 'Установите Ollama локально: https://ollama.ai',
+        'openai': 'Установите OPENAI_API_KEY для использования GPT'
+    }
+
+    return f"""🏹 Сәлеметсіз бе, ағайын! Merhaba kardeşim! Salom do'stim!
+
+Мен Тәмірлан - Түрік әлемінің жасанды интеллекті көмекшісімін!
+Ben Timur - Türk dünyasının yapay zeka asistanı!
+Men Temur - Turk dunyosining sun'iy intellekt yordamchisi!
+
+Сіздің хабарыңыз / Sizin mesajınız: "{user_message}"
+
+⚠️ DEMO РЕЖИМІ / DEMO MODE
+Таңдалған провайдер: {provider_names.get(provider_name, provider_name)}
+{provider_instructions.get(provider_name, 'Настройте API ключ')}
+
+Қолжетімді провайдерлер / Доступные провайдеры:
+🏆 Anthropic Claude 3.5 Sonnet - САМЫЙ УМНЫЙ!
+⚡ Google Gemini - Бесплатный и мощный
+💻 Ollama - Локальные модели (100% бесплатно)
+🔷 OpenAI GPT - Опционально
+
+Мен сізге көмектесе аламын:
+✓ Түрік тарихы / Türk tarihi / История тюркского мира
+✓ Тілдерді үйрену / Dil öğrenme / Изучение языков
+✓ Программалау / Programlama / Программирование
+✓ Бизнес / İş / Бизнес-консультации
+
+Провайдерді таңдаңыз және API ключін орнатыңыз! 🏹"""
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -82,7 +126,8 @@ def chat():
         data = request.json
         user_message = data.get('message', '')
         session_id = data.get('session_id', 'default')
-        model = data.get('model', 'gpt-3.5-turbo')
+        provider_name = data.get('provider', DEFAULT_PROVIDER)  # anthropic, gemini, ollama, openai
+        model = data.get('model', None)  # Опционально, для конкретной модели
 
         if not user_message:
             return jsonify({'error': 'Сообщение не может быть пустым'}), 400
@@ -99,42 +144,26 @@ def chat():
             "content": user_message
         })
 
-        # Вызов OpenAI API
-        if OPENAI_API_KEY:
-            openai.api_key = OPENAI_API_KEY
-            response = openai.ChatCompletion.create(
-                model=model,
-                messages=conversations[session_id],
-                temperature=0.7,
-                max_tokens=2000
-            )
+        # Создание провайдера и генерация ответа
+        try:
+            provider = AIProviderFactory.create_provider(provider_name, model)
 
-            assistant_message = response.choices[0].message.content
-        else:
-            # Демо-режим без API ключа
-            assistant_message = f"""🏹 Сәлеметсіз бе, ағайын! Merhaba kardeşim! Salom do'stim!
+            if not provider.is_configured():
+                # Демо-режим если провайдер не настроен
+                assistant_message = get_demo_message(user_message, provider_name)
+            else:
+                # Генерация ответа через выбранный провайдер
+                assistant_message = provider.generate_response(
+                    messages=conversations[session_id],
+                    temperature=0.7,
+                    max_tokens=4000 if provider_name == 'anthropic' else 2000
+                )
 
-Мен Тәмірлан - Түрік әлемінің жасанды интеллекті көмекшісімін!
-Ben Timur - Türk dünyasının yapay zeka asistanıyım!
-Men Temur - Turk dunyosining sun'iy intellekt yordamchisiman!
-
-Сіздің хабарыңыз / Sizin mesajınız / Sizning xabaringiz: "{user_message}"
-
-⚠️ DEMO РЕЖИМІ / DEMO MODE:
-Толық қызмет үшін OPENAI_API_KEY қажет.
-Tam işlev için OPENAI_API_KEY gerekli.
-To'liq xizmat uchun OPENAI_API_KEY kerak.
-
-Для полноценной работы установите OPENAI_API_KEY!
-
-Мен сізге көмектесе аламын / Size yardım edebilirim:
-✓ Түрік тарихы туралы сұрақтар / Türk tarihi soruları
-✓ Түркі тілдерін үйрену / Türk dillerini öğrenme
-✓ Программалау және технология / Programlama ve teknoloji
-✓ Бизнес кеңестері / İş tavsiyeleri
-✓ Мәдениет және дәстүрлер / Kültür ve gelenekler
-
-Түрік әлеміне қош келдіңіз! Türk dünyasına hoş geldiniz! 🏹"""
+        except Exception as e:
+            return jsonify({
+                'error': f'Ошибка провайдера {provider_name}: {str(e)}',
+                'suggestion': 'Попробуйте другой провайдер или проверьте настройки API ключей'
+            }), 500
 
         # Сохранение ответа ассистента
         conversations[session_id].append({
@@ -184,11 +213,47 @@ def get_history():
 
 @app.route('/api/health', methods=['GET'])
 def health():
+    """Проверка состояния сервиса и доступных провайдеров"""
+    providers_status = AIProviderFactory.get_available_providers()
+
     return jsonify({
         'status': 'ok',
-        'service': 'Tamerlane AI',
-        'api_configured': bool(OPENAI_API_KEY)
+        'service': 'Tamerlane AI - Multi-Provider Edition',
+        'default_provider': DEFAULT_PROVIDER,
+        'providers': providers_status
     })
+
+
+@app.route('/api/providers', methods=['GET'])
+def get_providers():
+    """Получение списка доступных AI провайдеров"""
+    try:
+        providers = AIProviderFactory.get_available_providers()
+        return jsonify({
+            'providers': providers,
+            'default': DEFAULT_PROVIDER
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/providers/<provider_name>/models', methods=['GET'])
+def get_provider_models(provider_name):
+    """Получение списка моделей для конкретного провайдера"""
+    try:
+        providers = AIProviderFactory.get_available_providers()
+
+        if provider_name not in providers:
+            return jsonify({'error': 'Провайдер не найден'}), 404
+
+        return jsonify({
+            'provider': provider_name,
+            'models': providers[provider_name]['models'],
+            'configured': providers[provider_name]['configured']
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

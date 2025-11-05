@@ -9,10 +9,29 @@
 │   🏹 ТАМЕРЛАН ИИ                               │
 │   Түрік Жасанды Интеллект                      │
 │   Turkic AI Assistant                          │
+│   Multi-Provider Edition                       │
 └────────────────────────────────────────────────┘
 ```
 
+[![Anthropic Claude](https://img.shields.io/badge/Claude_3.5-Самый_умный!-9b59b6)](https://www.anthropic.com/)
+[![Google Gemini](https://img.shields.io/badge/Gemini-Бесплатный-4285F4)](https://gemini.google.com/)
+[![Ollama](https://img.shields.io/badge/Ollama-Локальный-000000)](https://ollama.ai/)
+[![OpenAI GPT](https://img.shields.io/badge/GPT--4-Опционально-74aa9c)](https://openai.com/)
+
 </div>
+
+## 🤖 НОВИНКА! Множественные AI провайдеры
+
+Тамерлан ИИ теперь поддерживает **4 разных AI провайдера**! Выбирайте между самыми мощными моделями:
+
+| Провайдер | Описание | Стоимость | Качество |
+|-----------|----------|-----------|----------|
+| 🏆 **[Anthropic Claude](PROVIDERS.md#-anthropic-claude---самый-умный-рекомендуется)** | Claude 3.5 Sonnet - САМАЯ УМНАЯ модель! | Платно | ⭐⭐⭐⭐⭐ |
+| ⚡ **[Google Gemini](PROVIDERS.md#-google-gemini---бесплатный-и-мощный)** | Мощный и бесплатный | **БЕСПЛАТНО** | ⭐⭐⭐⭐ |
+| 💻 **[Ollama](PROVIDERS.md#-ollama---локальные-модели)** | Локальные open-source модели | **БЕСПЛАТНО** | ⭐⭐⭐ |
+| 🔷 **[OpenAI GPT](PROVIDERS.md#-openai-gpt---опционально)** | Оригинальный ChatGPT | Платно | ⭐⭐⭐⭐ |
+
+📖 **[Подробное руководство по провайдерам →](PROVIDERS.md)**
 
 ## 🌟 Возможности
 

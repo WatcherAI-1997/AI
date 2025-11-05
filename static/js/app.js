@@ -16,13 +16,16 @@ class TamerlaneAI {
         this.messageInput = document.getElementById('messageInput');
         this.sendBtn = document.getElementById('sendBtn');
         this.clearBtn = document.getElementById('clearBtn');
+        this.providerSelect = document.getElementById('providerSelect');
         this.modelSelect = document.getElementById('modelSelect');
         this.sendBtnText = document.getElementById('sendBtnText');
         this.loadingSpinner = document.getElementById('loadingSpinner');
         this.statusIndicator = document.getElementById('statusIndicator');
+        this.currentProvider = 'anthropic';
+        this.providers = {};
 
         this.attachEventListeners();
-        this.checkHealth();
+        this.loadProviders();
     }
 
     attachEventListeners() {
@@ -40,11 +43,69 @@ class TamerlaneAI {
         // Очистка чата
         this.clearBtn.addEventListener('click', () => this.clearChat());
 
+        // Смена провайдера
+        this.providerSelect.addEventListener('change', (e) => {
+            this.currentProvider = e.target.value;
+            this.loadModelsForProvider(this.currentProvider);
+        });
+
         // Автоматическое изменение высоты textarea
         this.messageInput.addEventListener('input', () => {
             this.messageInput.style.height = 'auto';
             this.messageInput.style.height = this.messageInput.scrollHeight + 'px';
         });
+    }
+
+    async loadProviders() {
+        try {
+            const response = await fetch(`${this.apiUrl}/providers`);
+            const data = await response.json();
+
+            this.providers = data.providers;
+            this.updateProvidersStatus();
+            this.checkHealth();
+        } catch (error) {
+            console.error('Error loading providers:', error);
+            this.checkHealth();
+        }
+    }
+
+    updateProvidersStatus() {
+        // Обновляем визуальный статус провайдеров
+        Object.keys(this.providers).forEach(providerName => {
+            const provider = this.providers[providerName];
+            const option = this.providerSelect.querySelector(`option[value="${providerName}"]`);
+            if (option) {
+                const status = provider.configured ? '✅' : '⚠️';
+                option.textContent = `${status} ${option.textContent.replace(/^(✅|⚠️)\s/, '')}`;
+            }
+        });
+    }
+
+    async loadModelsForProvider(providerName) {
+        try {
+            const response = await fetch(`${this.apiUrl}/providers/${providerName}/models`);
+            const data = await response.json();
+
+            // Обновляем список моделей
+            this.modelSelect.innerHTML = '';
+            data.models.forEach(model => {
+                const option = document.createElement('option');
+                option.value = model;
+                option.textContent = model;
+                this.modelSelect.appendChild(option);
+            });
+
+            // Показываем селектор моделей если есть выбор
+            if (data.models.length > 1) {
+                this.modelSelect.style.display = 'inline-block';
+            } else {
+                this.modelSelect.style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Error loading models:', error);
+            this.modelSelect.style.display = 'none';
+        }
     }
 
     async checkHealth() {
@@ -86,16 +147,23 @@ class TamerlaneAI {
         this.messageInput.style.height = 'auto';
 
         try {
+            const requestBody = {
+                message: message,
+                session_id: this.sessionId,
+                provider: this.currentProvider
+            };
+
+            // Добавляем модель если она выбрана
+            if (this.modelSelect.value && this.modelSelect.style.display !== 'none') {
+                requestBody.model = this.modelSelect.value;
+            }
+
             const response = await fetch(`${this.apiUrl}/chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    message: message,
-                    session_id: this.sessionId,
-                    model: this.modelSelect.value
-                })
+                body: JSON.stringify(requestBody)
             });
 
             const data = await response.json();
