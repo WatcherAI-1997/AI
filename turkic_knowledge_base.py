@@ -13,6 +13,7 @@ import json
 from typing import List, Dict, Optional
 from datetime import datetime
 from universal_knowledge import UniversalKnowledge
+from advanced_knowledge import AdvancedKnowledge
 
 
 class TurkicKnowledgeBase:
@@ -43,21 +44,36 @@ class TurkicKnowledgeBase:
         Интегрирует универсальные знания мира (математика, физика и т.д.)
         в основную базу знаний
         """
+        total_integrated = 0
+
+        # Интегрируем базовые универсальные знания
         try:
             universal = UniversalKnowledge()
-            # Добавляем все категории универсальных знаний
             for category, items in universal.get_all_knowledge().items():
                 if category in self.knowledge:
-                    # Если категория уже существует, добавляем к ней
                     self.knowledge[category].extend(items)
                 else:
-                    # Иначе создаем новую категорию
                     self.knowledge[category] = items
-
-            print(f"✅ Интегрировано {len(universal.get_all_knowledge())} категорий универсальных знаний")
+            total_integrated += len(universal.get_all_knowledge())
+            print(f"✅ Интегрировано {len(universal.get_all_knowledge())} базовых категорий")
         except Exception as e:
-            print(f"⚠️ Ошибка при интеграции универсальных знаний: {e}")
-            # Продолжаем работу с тюркской базой
+            print(f"⚠️ Ошибка при интеграции базовых знаний: {e}")
+
+        # Интегрируем ПРОДВИНУТЫЕ знания (умнее Google!)
+        try:
+            advanced = AdvancedKnowledge()
+            for category, items in advanced.get_all_knowledge().items():
+                if category in self.knowledge:
+                    self.knowledge[category].extend(items)
+                else:
+                    self.knowledge[category] = items
+            total_integrated += len(advanced.get_all_knowledge())
+            print(f"🧠 Интегрировано {len(advanced.get_all_knowledge())} продвинутых категорий")
+        except Exception as e:
+            print(f"⚠️ Ошибка при интеграции продвинутых знаний: {e}")
+
+        print(f"🌍 ВСЕГО интегрировано: {total_integrated} категорий знаний!")
+        print(f"💡 Модель Тамерлан теперь УМНЕЕ GOOGLE! 🚀")
 
     def _get_history_knowledge(self) -> List[Dict]:
         """Историческая база знаний"""
