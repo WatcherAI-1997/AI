@@ -6,11 +6,13 @@ Turkic Knowledge Base for Tamerlane AI Model
 - RAG (Retrieval-Augmented Generation)
 - Векторный поиск по тюркским данным
 - Контекстное обогащение ответов
+- Универсальные знания всего мира
 """
 
 import json
 from typing import List, Dict, Optional
 from datetime import datetime
+from universal_knowledge import UniversalKnowledge
 
 
 class TurkicKnowledgeBase:
@@ -20,6 +22,8 @@ class TurkicKnowledgeBase:
 
     def __init__(self):
         self.knowledge = self._initialize_knowledge()
+        # Интегрируем универсальные знания
+        self._integrate_universal_knowledge()
 
     def _initialize_knowledge(self) -> Dict:
         """Инициализация базы знаний"""
@@ -33,6 +37,27 @@ class TurkicKnowledgeBase:
             "traditions": self._get_traditions_knowledge(),
             "modern_world": self._get_modern_knowledge()
         }
+
+    def _integrate_universal_knowledge(self):
+        """
+        Интегрирует универсальные знания мира (математика, физика и т.д.)
+        в основную базу знаний
+        """
+        try:
+            universal = UniversalKnowledge()
+            # Добавляем все категории универсальных знаний
+            for category, items in universal.get_all_knowledge().items():
+                if category in self.knowledge:
+                    # Если категория уже существует, добавляем к ней
+                    self.knowledge[category].extend(items)
+                else:
+                    # Иначе создаем новую категорию
+                    self.knowledge[category] = items
+
+            print(f"✅ Интегрировано {len(universal.get_all_knowledge())} категорий универсальных знаний")
+        except Exception as e:
+            print(f"⚠️ Ошибка при интеграции универсальных знаний: {e}")
+            # Продолжаем работу с тюркской базой
 
     def _get_history_knowledge(self) -> List[Dict]:
         """Историческая база знаний"""
@@ -309,19 +334,67 @@ class TurkicKnowledgeBase:
         return results[:limit]
 
     def _calculate_relevance(self, query: str, item: Dict) -> float:
-        """Расчет релевантности"""
+        """Расчет релевантности (поддерживает тюркские и универсальные знания)"""
         score = 0.0
+
+        # Разбиваем запрос на отдельные слова для более умного поиска
+        query_words = [w.lower() for w in query.split() if len(w) > 2]
 
         # Проверяем keywords если есть
         if 'keywords' in item:
             for keyword in item['keywords']:
-                if keyword.lower() in query:
+                keyword_lower = keyword.lower()
+                # Проверяем как полное совпадение
+                if keyword_lower in query:
+                    score += 2.0
+                # Проверяем по словам
+                for word in query_words:
+                    if word in keyword_lower or keyword_lower in word:
+                        score += 1.5
+
+        # Проверяем topic/название (высокий приоритет)
+        if 'topic' in item and isinstance(item['topic'], str):
+            topic_lower = item['topic'].lower()
+            # Полное совпадение
+            if query in topic_lower:
+                score += 3.0
+            # Частичное совпадение по словам
+            for word in query_words:
+                if word in topic_lower:
                     score += 2.0
 
-        # Проверяем все текстовые поля
+        # Проверяем категорию
+        if 'category' in item and isinstance(item['category'], str):
+            category_lower = item['category'].lower()
+            if query in category_lower:
+                score += 1.5
+            for word in query_words:
+                if word in category_lower:
+                    score += 1.0
+
+        # Проверяем все текстовые поля (content_kk, content_tr, content_uz, content_ru, и т.д.)
         for key, value in item.items():
-            if isinstance(value, str) and query in value.lower():
-                score += 1.0
+            if isinstance(value, str):
+                value_lower = value.lower()
+                # Полное совпадение запроса
+                if query in value_lower:
+                    if key.startswith('content_'):
+                        score += 1.5
+                    else:
+                        score += 1.0
+                # Частичное совпадение по словам
+                for word in query_words:
+                    if word in value_lower:
+                        if key.startswith('content_'):
+                            score += 0.5
+                        else:
+                            score += 0.3
+
+        # Проверяем списки формул (для математики/физики)
+        if 'formulas' in item and isinstance(item['formulas'], list):
+            for formula in item['formulas']:
+                if query in formula.lower():
+                    score += 2.0
 
         # Бонус за importance
         if 'importance' in item:
