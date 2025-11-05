@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тамерлан ИИ - Тюркский Ассистент</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <h1>🏹 ТАМЕРЛАН ИИ</h1>
+                <p class="subtitle">Түрік Жасанды Интеллект | Turkic AI Assistant</p>
+            </div>
+            <div class="controls">
+                <button id="clearBtn" class="btn btn-secondary">🗑️ Очистить чат</button>
+                <select id="modelSelect" class="model-select">
+                    <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                    <option value="gpt-4">GPT-4</option>
+                    <option value="gpt-4-turbo-preview">GPT-4 Turbo</option>
+                </select>
+            </div>
+        </header>
+
+        <div class="chat-container" id="chatContainer">
+            <div class="welcome-message">
+                <h2>Сәлеметсіз бе! / Здравствуйте!</h2>
+                <p>Я Тамерлан - ваш Тюркский ИИ-ассистент. Готов помочь вам с:</p>
+                <ul>
+                    <li>🏛️ Историей и культурой тюркских народов</li>
+                    <li>🗣️ Изучением тюркских языков (казахский, турецкий, узбекский и др.)</li>
+                    <li>💻 Программированием и технологиями</li>
+                    <li>📚 Образованием и саморазвитием</li>
+                    <li>💼 Бизнес-консультациями</li>
+                    <li>🌟 Любыми другими вопросами</li>
+                </ul>
+                <p class="hint">Просто напишите ваш вопрос ниже...</p>
+            </div>
+        </div>
+
+        <div class="input-container">
+            <textarea
+                id="messageInput"
+                placeholder="Напишите сообщение... (Поддерживаются: Русский, Қазақша, Türkçe, O'zbek...)"
+                rows="3"
+            ></textarea>
+            <button id="sendBtn" class="btn btn-primary">
+                <span id="sendBtnText">Отправить 📤</span>
+                <span id="loadingSpinner" class="spinner" style="display: none;">⏳</span>
+            </button>
+        </div>
+
+        <footer class="footer">
+            <p>Сделано с ❤️ для тюркского мира | Status: <span id="statusIndicator">🟢 Online</span></p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
