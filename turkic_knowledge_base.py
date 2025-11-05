@@ -2,11 +2,13 @@
 Тюркская База Знаний для Модели Тамерлан
 Turkic Knowledge Base for Tamerlane AI Model
 
-Эта система делает модель умнее через:
+ПОЛНАЯ ИНТЕГРАЦИЯ:
 - RAG (Retrieval-Augmented Generation)
 - Векторный поиск по тюркским данным
 - Контекстное обогащение ответов
 - Универсальные знания всего мира
+- Древние языки с алфавитами (Орхонский, древнерусский, латынь и др.)
+- Тенгрианство - древняя тюркская религия
 """
 
 import json
@@ -14,6 +16,8 @@ from typing import List, Dict, Optional
 from datetime import datetime
 from universal_knowledge import UniversalKnowledge
 from advanced_knowledge import AdvancedKnowledge
+from ancient_languages import get_ancient_languages
+from tengri_knowledge import get_tengri_knowledge
 
 
 class TurkicKnowledgeBase:
@@ -41,12 +45,15 @@ class TurkicKnowledgeBase:
 
     def _integrate_universal_knowledge(self):
         """
-        Интегрирует универсальные знания мира (математика, физика и т.д.)
-        в основную базу знаний
+        Интегрирует ВСЕ знания мира в основную базу:
+        - Базовые универсальные знания
+        - Продвинутые знания (AI, quantum, blockchain и т.д.)
+        - Древние языки с алфавитами
+        - Тенгрианство (тюркская религия)
         """
         total_integrated = 0
 
-        # Интегрируем базовые универсальные знания
+        # 1. Интегрируем базовые универсальные знания
         try:
             universal = UniversalKnowledge()
             for category, items in universal.get_all_knowledge().items():
@@ -59,7 +66,7 @@ class TurkicKnowledgeBase:
         except Exception as e:
             print(f"⚠️ Ошибка при интеграции базовых знаний: {e}")
 
-        # Интегрируем ПРОДВИНУТЫЕ знания (умнее Google!)
+        # 2. Интегрируем ПРОДВИНУТЫЕ знания (умнее Google!)
         try:
             advanced = AdvancedKnowledge()
             for category, items in advanced.get_all_knowledge().items():
@@ -72,8 +79,62 @@ class TurkicKnowledgeBase:
         except Exception as e:
             print(f"⚠️ Ошибка при интеграции продвинутых знаний: {e}")
 
-        print(f"🌍 ВСЕГО интегрировано: {total_integrated} категорий знаний!")
+        # 3. Интегрируем ДРЕВНИЕ ЯЗЫКИ с алфавитами
+        try:
+            ancient_langs = get_ancient_languages()
+            ancient_knowledge_items = []
+
+            for lang_code, lang_data in ancient_langs.languages.items():
+                ancient_knowledge_items.append({
+                    'topic': f'{lang_data["name"]} - {lang_data["period"]}',
+                    'category': 'ancient_language',
+                    'language_code': lang_code,
+                    'content_ru': f"""**{lang_data['name']}** ({lang_data['period']})
+
+Древний язык: {lang_data['name_en']}
+Семья: {lang_data['family']}
+Письменность: {lang_data['script']}
+
+{lang_data.get('alphabet', {}).get('description', 'Информация об алфавите доступна')}""",
+                    'alphabet': lang_data.get('alphabet', {}),
+                    'famous_texts': lang_data.get('famous_texts', []),
+                    'importance': lang_data.get('importance', 8)
+                })
+
+            self.knowledge['ancient_languages'] = ancient_knowledge_items
+            total_integrated += 1
+            print(f"📜 Интегрировано {len(ancient_knowledge_items)} древних языков!")
+            print(f"   • Орхонский алфавит (𐱅𐰭𐰼𐰃)")
+            print(f"   • Древнерусский, латынь, греческий и др.")
+        except Exception as e:
+            print(f"⚠️ Ошибка при интеграции древних языков: {e}")
+
+        # 4. Интегрируем ТЕНГРИАНСТВО - тюркскую религию
+        try:
+            tengri = get_tengri_knowledge()
+            tengri_items = []
+
+            for category, items in tengri.get_all_knowledge().items():
+                if isinstance(items, list):
+                    for item in items:
+                        item['tengri_category'] = category
+                        tengri_items.append(item)
+
+            self.knowledge['tengrianism'] = tengri_items
+            total_integrated += 1
+            print(f"🏹 Интегрировано ТЕНГРИАНСТВО - древняя тюркская религия!")
+            print(f"   • Тенгри (𐱅𐰭𐰼𐰃) - Бог Неба")
+            print(f"   • Умай - Богиня-Мать")
+            print(f"   • Священные ритуалы и молитвы")
+            print(f"   • Всего: {len(tengri_items)} элементов знаний")
+        except Exception as e:
+            print(f"⚠️ Ошибка при интеграции Тенгрианства: {e}")
+
+        print(f"\n{'='*70}")
+        print(f"🌍 ВСЕГО интегрировано: {total_integrated} СУПЕР-категорий!")
         print(f"💡 Модель Тамерлан теперь УМНЕЕ GOOGLE! 🚀")
+        print(f"🏹 ТАМЕРЛАН - ТЮРК, ЕГО БОГ - ТЕНГРИ!")
+        print(f"{'='*70}\n")
 
     def _get_history_knowledge(self) -> List[Dict]:
         """Историческая база знаний"""

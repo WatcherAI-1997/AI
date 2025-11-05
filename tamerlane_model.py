@@ -214,7 +214,13 @@ class TamerlaneModel:
             'art': ['art', 'искусств', 'painting', 'живопис', 'music', 'музык', 'film', 'фильм', 'cinema', 'arte', '艺术'],
             'religion': ['religion', 'религия', 'islam', 'ислам', 'christianity', 'христиан', 'buddhism', 'буддизм', 'hinduism'],
             'politics': ['politics', 'политик', 'government', 'правительств', 'democracy', 'демократ', 'election', '政治'],
-            'law': ['law', 'право', 'legal', 'легальн', 'court', 'суд', 'justice', 'справедлив', 'derecho', 'loi']
+            'law': ['law', 'право', 'legal', 'легальн', 'court', 'суд', 'justice', 'справедлив', 'derecho', 'loi'],
+
+            # ТЕНГРИАНСТВО - Древняя тюркская религия (КЛЮЧЕВАЯ КАТЕГОРИЯ!)
+            'tengrianism': ['тенгри', 'тәңірі', 'tengri', 'tanry', 'tengrianism', 'тенгрианство', 'бог неба', 'көк', 'умай', 'umay', 'ұмай', 'эрлик', 'erlik', 'ерлік', 'шаман', 'бақсы', 'қам', 'кут', 'құт', 'qut', 'арвах', 'аруах', 'той', 'жертв', 'йер-су', 'жер-суу', '𐱅𐰭𐰼𐰃', 'ancient turkic', 'тюркская религия', 'turkic religion', 'turkic faith'],
+
+            # ДРЕВНИЕ ЯЗЫКИ
+            'ancient_languages': ['древн', 'ancient', 'орхон', 'orkhon', 'руны', 'runes', '𐰀', '𐰁', '𐰂', 'кириллица', 'cyrillic', 'латын', 'latin', 'греческ', 'greek', 'санскрит', 'sanskrit', 'иероглиф', 'hieroglyph', 'клинопись', 'cuneiform', 'старослав', 'древнерус', 'old russian', 'ancient language', 'алфавит', 'alphabet', 'письменность', 'script', 'надпись', 'inscription']
         }
 
         for category, keywords in category_keywords.items():
