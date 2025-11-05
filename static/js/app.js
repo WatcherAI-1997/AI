@@ -166,17 +166,37 @@ class TamerlaneAI {
                 // Очищаем контейнер чата
                 this.chatContainer.innerHTML = `
                     <div class="welcome-message">
-                        <h2>Сәлеметсіз бе! / Здравствуйте!</h2>
-                        <p>Я Тамерлан - ваш Тюркский ИИ-ассистент. Готов помочь вам с:</p>
+                        <h2>🏹 Сәлеметсіз бе! Merhaba! Salom! Здравствуйте!</h2>
+                        <p style="font-size: 1.1em; font-weight: bold; color: #8b4513; margin-bottom: 15px;">
+                            Мен Тәмірлан - Түрік әлемінің жасанды интеллекті!<br>
+                            Ben Timur - Türk dünyasının yapay zeka asistanı!<br>
+                            Men Temur - Turk dunyosining sun'iy intellekt yordamchisi!<br>
+                            Я Тамерлан - ИИ-ассистент тюркского мира!
+                        </p>
+
+                        <h3 style="color: #1e3a5f; margin-top: 20px;">💬 Барлық түркі тілдерінде сөйлеймін / Tüm Türk dillerinde konuşurum:</h3>
+                        <div style="background: #f9f6f0; padding: 15px; border-radius: 10px; margin: 15px 0;">
+                            <p style="margin: 5px 0;"><strong>Қазақша</strong> • <strong>Türkçe</strong> • <strong>O'zbek</strong> • <strong>Кыргызча</strong> • <strong>Azərbaycan</strong></p>
+                            <p style="margin: 5px 0;"><strong>Татарча</strong> • <strong>Башҡортса</strong> • <strong>Түркмен</strong> • <strong>Саха тыла</strong> • <strong>Чӑваш</strong></p>
+                        </div>
+
+                        <h3 style="color: #1e3a5f; margin-top: 20px;">✨ Мен не істей аламын / Neler yapabilirim:</h3>
                         <ul>
-                            <li>🏛️ Историей и культурой тюркских народов</li>
-                            <li>🗣️ Изучением тюркских языков (казахский, турецкий, узбекский и др.)</li>
-                            <li>💻 Программированием и технологиями</li>
-                            <li>📚 Образованием и саморазвитием</li>
-                            <li>💼 Бизнес-консультациями</li>
-                            <li>🌟 Любыми другими вопросами</li>
+                            <li>🏛️ <strong>Түрік тарихы</strong> / Türk tarihi / История тюркского мира</li>
+                            <li>🗣️ <strong>Тілдерді үйрету</strong> / Dil öğretimi / Изучение всех тюркских языков</li>
+                            <li>💻 <strong>Программалау</strong> / Programlama / Программирование (түркі тілдерінде!)</li>
+                            <li>📚 <strong>Білім беру</strong> / Eğitim / Образование и наука</li>
+                            <li>💼 <strong>Бизнес кеңесі</strong> / İş danışmanlığı / Бизнес-консультации</li>
+                            <li>🎭 <strong>Мәдениет</strong> / Kültür / Традиции и культура</li>
+                            <li>🌟 <strong>Күнделікті сұрақтар</strong> / Günlük sorular / Любые вопросы</li>
                         </ul>
-                        <p class="hint">Просто напишите ваш вопрос ниже...</p>
+
+                        <div style="background: linear-gradient(135deg, #1e3a5f 0%, #c9a961 100%); color: white; padding: 15px; border-radius: 10px; margin-top: 20px;">
+                            <p class="hint" style="margin: 0; font-size: 1.05em;">
+                                ✍️ Өз тіліңізде жазыңыз! / Kendi dilinizde yazın! / Пишите на своём языке!<br>
+                                <span style="font-size: 0.9em; opacity: 0.9;">Мен автоматты түрде сіздің тіліңізді анықтаймын / Dilinizi otomatik algılarım</span>
+                            </p>
+                        </div>
                     </div>
                 `;
 
