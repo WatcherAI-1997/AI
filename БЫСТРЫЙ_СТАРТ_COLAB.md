@@ -2,8 +2,6 @@
 
 **Автор:** Джама Ваккасов (jamavakkasoff@gmail.com)
 
-**⚠️ ЭТО ПОЛНОЦЕННАЯ LLM МОДЕЛЬ!** Не обертка, а настоящий AI с RAG-системой!
-
 ---
 
 ## ⚡ За 3 минуты запустите Тамерлан AI!
@@ -115,6 +113,6 @@ result = model.generate(messages, base_model_fn=claude)
 
 **Автор:** Джама Ваккасов
 **Email:** jamavakkasoff@gmail.com
-**Проект:** Tamerlane AI - Полноценная тюркская LLM модель
+**Проект:** Tamerlane AI - Тюркская AI модель
 
 **🏹 Тәңірі жарылқасын!**

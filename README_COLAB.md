@@ -2,8 +2,6 @@
 
 **Автор:** Джама Ваккасов (jamavakkasoff@gmail.com)
 
-**⚠️ ЭТО ПОЛНОЦЕННАЯ LLM МОДЕЛЬ!** Не обертка над ChatGPT, а настоящая языковая модель с RAG-системой, которая конкурирует с GPT-4, Claude и Gemini!
-
 ---
 
 ## 📁 СТРУКТУРА ПРОЕКТА
@@ -439,6 +437,6 @@ print(sys.getdefaultencoding())  # Должно быть: utf-8
 
 **Автор:** Джама Ваккасов
 **Email:** jamavakkasoff@gmail.com
-**Проект:** Tamerlane AI - Полноценная тюркская LLM модель
+**Проект:** Tamerlane AI - Тюркская AI модель
 
 © 2024 Tamerlane AI Project
