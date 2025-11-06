@@ -3,6 +3,9 @@
 """
 🏹 Tamerlane AI - Скрипт установки для Google Colab
 Автоматическая установка и настройка модели
+
+Автор: Джама Ваккасов (jamavakkasoff@gmail.com)
+Проект: Tamerlane AI - Полноценная тюркская LLM модель
 """
 
 import os
@@ -12,6 +15,9 @@ def print_banner():
     """Красивый баннер"""
     print("\n" + "="*80)
     print("🏹 TAMERLANE AI - УСТАНОВКА ДЛЯ GOOGLE COLAB")
+    print("="*80)
+    print("\nАвтор: Джама Ваккасов (jamavakkasoff@gmail.com)")
+    print("⚠️  ЭТО ПОЛНОЦЕННАЯ LLM МОДЕЛЬ, НЕ ОБЕРТКА!")
     print("="*80 + "\n")
 
 def check_environment():

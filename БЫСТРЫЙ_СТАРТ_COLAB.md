@@ -1,5 +1,11 @@
 # 🚀 БЫСТРЫЙ СТАРТ В GOOGLE COLAB
 
+**Автор:** Джама Ваккасов (jamavakkasoff@gmail.com)
+
+**⚠️ ЭТО ПОЛНОЦЕННАЯ LLM МОДЕЛЬ!** Не обертка, а настоящий AI с RAG-системой!
+
+---
+
 ## ⚡ За 3 минуты запустите Тамерлан AI!
 
 ### Шаг 1: Откройте Colab
@@ -104,5 +110,11 @@ result = model.generate(messages, base_model_fn=claude)
 ## ✅ Готово!
 
 Теперь у вас работает Тамерлан AI в Google Colab!
+
+---
+
+**Автор:** Джама Ваккасов
+**Email:** jamavakkasoff@gmail.com
+**Проект:** Tamerlane AI - Полноценная тюркская LLM модель
 
 **🏹 Тәңірі жарылқасын!**
