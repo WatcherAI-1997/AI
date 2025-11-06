@@ -1,9 +1,17 @@
+# Tamerlane AI - Requirements
+# Автор: Джама Ваккасов (jamavakkasoff@gmail.com)
+
+# ДЛЯ ОБУЧЕНИЯ СОБСТВЕННОЙ МОДЕЛИ (train.py, generate.py)
+torch>=2.0.0
+numpy>=1.24.0
+
+# Для веб-интерфейса (RAG-версия)
 Flask==3.0.0
 flask-cors==4.0.0
 python-dotenv==1.0.0
 gunicorn==21.2.0
 
-# AI Providers
+# AI Providers (опционально, для RAG-версии)
 anthropic==0.18.1
 google-generativeai==0.3.2
 openai==1.3.0
