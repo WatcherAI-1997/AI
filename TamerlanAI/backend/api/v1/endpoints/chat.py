@@ -9,7 +9,7 @@ from typing import Optional, List, Dict, Any
 import logging
 import json
 
-from core.llm_manager import GenerationConfig
+from core.llm_manager_simple import GenerationConfig
 
 logger = logging.getLogger(__name__)
 
