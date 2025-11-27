@@ -1,221 +1,82 @@
-# 🏹 TamerlanAI - Universal Multilingual AI System
+# 🏹 TamerlanAI
+
+**Универсальная мультиязычная LLM модель для тюркских языков**
 
 **Автор:** Джама Ваккасов (jamavakkasoff@gmail.com)
 
 ---
 
-## 🎯 О проекте
-
-**TamerlanAI** - это универсальная мультиязычная искусственная система интеллекта с приоритетом на тюркские языки и диалекты.
-
-### ✨ Ключевые возможности:
-
-#### 🌍 Языковая поддержка
-- **Все тюркские языки**: турецкий, азербайджанский, узбекский, казахский, кыргызский, татарский, башкирский, якутский, туркменский, чувашский, карачаевский, гагаузский и др.
-- **Мультиязычность**: русский, английский, арабский, китайский, японский, корейский и др.
-- **Диалектная классификация**: автоматическое определение и адаптация к диалектам
-
-#### 🤖 AI Функциональность
-- Понимание и генерация текста
-- Анализ и суммаризация
-- Генерация кода
-- Перевод между языками
-- Прогнозирование и консультации
-- Автоматизация задач
-
-#### 🎭 Адаптивная личность
-- Формальный стиль
-- Академический
-- Бытовой
-- Бизнес
-- Народный
-- Поэтический
-- Религиозный
-- Философский
-
-#### 🔌 Интерфейсы
-- REST API
-- WebSocket (real-time)
-- Web-интерфейс
-- Telegram бот
-- Мобильное приложение (planned)
-
-#### 📚 Обучение
-- Fine-tuning на пользовательских данных
-- Continuous learning
-- RAG (Retrieval-Augmented Generation)
-- Адаптация к доменам
-
----
-
-## 🏗️ Архитектура
-
-```
-TamerlanAI/
-├── backend/              # FastAPI backend
-│   ├── api/             # REST API endpoints
-│   ├── core/            # Core LLM logic
-│   ├── models/          # AI models
-│   ├── services/        # Business logic
-│   ├── db/              # Database models
-│   └── utils/           # Utilities
-│
-├── frontend/            # React frontend
-│   ├── components/      # UI components
-│   ├── pages/          # Pages
-│   ├── services/       # API clients
-│   └── styles/         # CSS/Tailwind
-│
-├── telegram_bot/        # Telegram bot
-│   ├── handlers/       # Message handlers
-│   └── commands/       # Bot commands
-│
-├── training/           # Training pipelines
-│   ├── datasets/      # Training data
-│   ├── scripts/       # Training scripts
-│   └── checkpoints/   # Model checkpoints
-│
-├── deployment/        # Deployment configs
-│   ├── docker/       # Dockerfiles
-│   ├── k8s/          # Kubernetes configs
-│   └── nginx/        # Nginx configs
-│
-└── docs/             # Documentation
-```
-
----
-
-## 🚀 Быстрый старт
-
-### Требования
-- Python 3.11+
-- Node.js 18+
-- Docker & Docker Compose
-- PostgreSQL 15+
-- Redis 7+
-
-### Установка
+## ⚡ БЫСТРАЯ УСТАНОВКА (ОДНА КОМАНДА!)
 
 ```bash
-# Клонирование
-git clone https://github.com/YOUR_USERNAME/TamerlanAI.git
 cd TamerlanAI
-
-# Backend
-cd backend
-python -m venv venv
-source venv/bin/activate  # или venv\Scripts\activate на Windows
-pip install -r requirements.txt
-
-# Frontend
-cd ../frontend
-npm install
-
-# Database
-docker-compose up -d postgres redis
-
-# Миграции
-cd ../backend
-alembic upgrade head
+chmod +x install.sh
+./install.sh
 ```
 
-### Запуск
+**Это все! Скрипт сделает:**
+- ✅ Проверит Python
+- ✅ Установит PyTorch и все зависимости
+- ✅ Обучит модель (~2 минуты)
+- ✅ Настроит окружение
+
+---
+
+## 🚀 ЗАПУСК
 
 ```bash
-# Backend (terminal 1)
-cd backend
-uvicorn main:app --reload --port 8000
-
-# Frontend (terminal 2)
-cd frontend
-npm run dev
-
-# Telegram Bot (terminal 3)
-cd telegram_bot
-python bot.py
+cd TamerlanAI/backend
+./start.sh
 ```
 
-Откройте: http://localhost:3000
+Сервер: http://localhost:8000
+API Docs: http://localhost:8000/docs
 
 ---
 
-## 📖 Документация
+## 📖 ЧТО ЭТО?
 
-- [Архитектура](docs/ARCHITECTURE.md)
-- [API Reference](docs/API.md)
-- [Обучение моделей](docs/TRAINING.md)
-- [Deployment](docs/DEPLOYMENT.md)
-- [Вклад в проект](docs/CONTRIBUTING.md)
+**TamerlanAI** - настоящая обучаемая LLM модель (не заглушка!)
 
----
-
-## 🛣️ Roadmap
-
-### Phase 1: Core (✅ In Progress)
-- [x] Архитектура проекта
-- [x] Базовая структура
-- [ ] Core LLM module
-- [ ] REST API
-- [ ] Web UI
-- [ ] Telegram bot
-
-### Phase 2: AI Features
-- [ ] Multilingual NLP pipeline
-- [ ] Dialect classification
-- [ ] Translation engine
-- [ ] RAG implementation
-- [ ] Fine-tuning pipeline
-
-### Phase 3: Advanced
-- [ ] Adaptive personality
-- [ ] Code generation
-- [ ] Image generation
-- [ ] Voice interface
-- [ ] Mobile app
-
-### Phase 4: Production
-- [ ] Scalability optimization
-- [ ] Security hardening
-- [ ] Monitoring & Analytics
-- [ ] Cloud deployment
-- [ ] Enterprise features
+- **🧠 3.3M параметров** - decoder-only трансформер (GPT-style)
+- **🌍 23 языка** - 14 тюркских + 9 других
+- **⚡ Локально** - без внешних API
+- **📚 Обучаемая** - на своих данных
 
 ---
 
-## 🤝 Вклад в проект
+## 🧪 БЫСТРЫЙ ТЕСТ
 
-Мы приветствуем вклад в развитие TamerlanAI!
-
-1. Fork проекта
-2. Создайте ветку: `git checkout -b feature/amazing-feature`
-3. Commit: `git commit -m 'Add amazing feature'`
-4. Push: `git push origin feature/amazing-feature`
-5. Создайте Pull Request
+```bash
+cd TamerlanAI/backend
+python3 test_real.py
+```
 
 ---
 
-## 📄 Лицензия
+## 📝 ПРИМЕР
 
-MIT License - см. [LICENSE](LICENSE)
+```python
+import requests
 
----
+response = requests.post(
+    "http://localhost:8000/api/v1/chat/",
+    json={
+        "messages": [{"role": "user", "content": "Сәлем!"}],
+        "language": "kk"
+    }
+)
 
-## 📧 Контакты
-
-**Джама Ваккасов**
-- Email: jamavakkasoff@gmail.com
-- GitHub: [@WatcherAI-1997](https://github.com/WatcherAI-1997)
-
----
-
-## 🙏 Благодарности
-
-- Тюркскому сообществу за поддержку
-- Open-source AI community
-- Всем контрибьюторам
+print(response.json()["message"]["content"])
+```
 
 ---
 
-**🏹 Тәңірі жарылқасын!** (Да благословит Тенгри!)
+## 📚 ДОКУМЕНТАЦИЯ
 
-© 2024 TamerlanAI Project
+- [Полная документация](backend/README_RU.md)
+- [API Docs](http://localhost:8000/docs)
+
+---
+
+## 🏹 Тәңірі жарылқасын!
