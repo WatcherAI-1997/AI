@@ -13,8 +13,8 @@ import time
 
 from config import get_settings
 from api.v1.router import api_router
-from core.llm_manager import LLMManager
-from db.database import init_db
+from core.llm_manager_real import RealLLMManager
+# from db.database import init_db  # Пока отключено для упрощения
 
 # Настройка логирования
 logging.basicConfig(
@@ -32,13 +32,13 @@ async def lifespan(app: FastAPI):
     # Startup
     logger.info("🏹 Starting TamerlanAI...")
 
-    # Инициализация БД
-    logger.info("📦 Initializing database...")
-    await init_db()
+    # Инициализация БД (отключено для упрощения)
+    # logger.info("📦 Initializing database...")
+    # await init_db()
 
-    # Инициализация LLM
-    logger.info("🤖 Loading AI models...")
-    app.state.llm_manager = LLMManager()
+    # Инициализация НАСТОЯЩЕГО LLM с TamerlaneGPT
+    logger.info("🤖 Loading TamerlaneGPT model...")
+    app.state.llm_manager = RealLLMManager()
     await app.state.llm_manager.initialize()
 
     logger.info("✅ TamerlanAI started successfully!")
