@@ -1,0 +1,15 @@
+# TamerlanAI Backend - Minimal Requirements
+# Автор: Джама Ваккасов (jamavakkasoff@gmail.com)
+
+# Web Framework (обязательно)
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# Utilities (обязательно)
+python-dotenv==1.0.0
+python-multipart==0.0.6
+
+# Development (опционально)
+pytest==7.4.3
